@@ -2,6 +2,8 @@
 
 package istty
 
+import "syscall"
+
 func isTerminal(fd uintptr) bool {
 	path, err := syscall.Fd2path(int(fd))
 	if err != nil {

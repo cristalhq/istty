@@ -1,13 +1,18 @@
 package istty
 
+import (
+	"syscall"
+	"unsafe"
+)
+
 var (
 	modkernel32        = syscall.MustLoadDLL("kernel32.dll")
 	procGetConsoleMode = modkernel32.MustFindProc("GetConsoleMode")
 )
 
-func IsTerminal(file *os.File) bool {
+func isTerminal(fd uintptr) bool {
 	var st uint32
-	return getConsoleMode(syscall.Handle(file.Fd()), &st) == nil
+	return getConsoleMode(syscall.Handle(fd), &st) == nil
 }
 
 func getConsoleMode(hConsoleHandle syscall.Handle, lpMode *uint32) (err error) {
